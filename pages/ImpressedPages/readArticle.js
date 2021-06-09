@@ -5,8 +5,9 @@ import { StatusBar } from 'expo-status-bar';
 
 
 export default function readArticle({navigation, route}) {
+    const { chapter, bookName } = route.params;
 
-  return (
+    return (
 
     <View style={styles.container}>
         <StatusBar style="white" />
@@ -20,23 +21,12 @@ export default function readArticle({navigation, route}) {
         </View>
 
         <View>
-            <Text style={styles.bookTitle}>01 너무</Text>  
+            <Text style={styles.bookTitle}>{chapter.title}</Text>  
 
         </View>
         <ScrollView style={styles.textContainer}>
                
-                <Text style={styles.bookText}>   
-
-                    너무 쉽게 들춰보아 너덜해진 편지지가 
-                    있고 너무 세게 열어두어 닫힌 줄 모르는 
-                    마음과 너무 깊이 맛보아서 비릿해진 
-                    그림움이 있어. 
-
-                    너무 오래 쓰다듬어 
-                    매끈해진 로라반정이 있고 너무 높이 
-                    자라나서 비대해진 생각들이 있고
-                    너무 자주 발음해서 입술에 물든 
-                    네 이름이 있어.</Text>  
+                <Text style={styles.bookText}>{chapter.content}</Text>  
           
         
        </ScrollView>

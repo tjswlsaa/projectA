@@ -1,13 +1,50 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, TouchableHighlight} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { firebase_db } from '../../firebaseConfig';
+import { render } from 'react-dom';
 
 const aboutBookImage = "http://ojsfile.ohmynews.com/STD_IMG_FILE/2018/0309/IE002297749_STD.jpg"
 
-const Main = ({navigation,route}) => {
+const BookItem = ({navigation, item}) => {
+    console.log(item);
     return (
+        <TouchableHighlight onPress={()=>{navigation.navigate('readBook', {item: item})}}>
+            <View>
+                <Image style={styles.bookButtonImage} source={{uri:aboutBookImage}} />
+            </View>
+        </TouchableHighlight>
+    )
+}
 
+const Main = ({navigation, route}) => {
+    const [books, setBooks] = useState([]);
 
+    useEffect(() => {
+        let temp = [];
+        let data = firebase_db.ref('books/')
+            .on('value', (snapshot) => {
+                console.log(snapshot);
+                snapshot.forEach((child) => {
+                    temp.push(child.val());
+                })
+                setBooks(temp);
+                //console.log(temp);
+            })
+    }, [])
+
+    function renderBooks() {
+        //console.log(books);
+        const list = books.map(item => (
+            <BookItem 
+                navigation={navigation}
+                item={item}
+            />
+        ))
+        return list
+    }
+
+    return (
 <ScrollView style={styles.container}>
     <StatusBar style="white" />
 
@@ -20,21 +57,7 @@ const Main = ({navigation,route}) => {
         <ScrollView style={styles.cardContainer} horizontal = {true}>
 
 
-        <TouchableHighlight onPress={()=>{navigation.navigate('readBook')}}>
-          <Image style={styles.bookButtonImage} source={{uri:aboutBookImage}} />
-        </TouchableHighlight>
-        <TouchableHighlight onPress={()=>{navigation.navigate('readBook')}}>
-          <Image style={styles.bookButtonImage} source={{uri:aboutBookImage}} />
-        </TouchableHighlight>
-        <TouchableHighlight onPress={()=>{navigation.navigate('readBook')}}>
-          <Image style={styles.bookButtonImage} source={{uri:aboutBookImage}} />
-        </TouchableHighlight>
-        <TouchableHighlight onPress={()=>{navigation.navigate('readBook')}}>
-          <Image style={styles.bookButtonImage} source={{uri:aboutBookImage}} />
-        </TouchableHighlight>
-        <TouchableHighlight onPress={()=>{navigation.navigate('readBook')}}>
-          <Image style={styles.bookButtonImage} source={{uri:aboutBookImage}} />
-        </TouchableHighlight>
+        { renderBooks() }
 
         </ScrollView> 
     </View>

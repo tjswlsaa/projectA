@@ -2,59 +2,59 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
+const ChapterItem = ({navigation, item, bookName}) => {
+    console.log(item);
+    return (
+        <View>
+            <TouchableOpacity style={styles.bookIndexOne} onPress={()=>{navigation.navigate('readArticle', {chapter: item, bookName: bookName})}}>
+                <Text style={styles.bookIndexOneTitle}>{item.title}</Text>  
+                <Text style={styles.bookIndexOnePunchLine}>"먼 훗날 나를 읽게 된다면 너는 잠시 울어줄까"</Text>  
+                <Text style={styles.bookIndexText}>{item.content}</Text>
+            </TouchableOpacity>
+            <View style={{borderBottomColor: "gray" ,borderBottomWidth: 1,}}/>
+        </View>
+    )
+}
 
-const readBook = ({navigation,route}) => {
+const readBook = ({navigation, route}) => {
+    const { item } = route.params;
 
     const aboutImage = "http://ojsfile.ohmynews.com/STD_IMG_FILE/2018/0309/IE002297749_STD.jpg"
-  
 
-  
+    function renderChapterList() {
+        if(item.chapter == undefined) {
+            return null
+        }
+        else {
+            const list = item.chapter.map(chapter => (
+                <ChapterItem 
+                    navigation={navigation}
+                    item={chapter}
+                    bookName={item.title}
+                />
+            ))
+            return list
+        }
+    }
+
     return (
-      <ScrollView style={styles.container}>
-
+    <ScrollView style={styles.container}>
         <View  style={styles.bookCoverContainer}>
             <StatusBar style="white" />
             <Image style={styles.bookCoverImage} source={{uri:aboutImage}}></Image>
-         
         </View>
         <View  style={styles.bookInfoContainer}>
-            <Text style={styles.bookTitle}>이별일기</Text>  
-            <Text style={styles.bookDesc}>이별을 겪고 그를 잊는 날까지의 짧은 일기장</Text>  
+            <Text style={styles.bookTitle}>{item.title}</Text>  
+            <Text style={styles.bookDesc}>{item.description}</Text>  
             <TouchableOpacity style={styles.subButton}>        
                 <Text style={styles.subButtonText}>구독하기</Text>
             </TouchableOpacity>   
         </View>
-
-
         <View style={styles.bookIndexContainer}>
-            <TouchableOpacity style={styles.bookIndexOne} onPress={()=>{navigation.navigate('readArticle')}}>
-                <Text style={styles.bookIndexOneTitle}>01 이별 그 순간</Text>  
-                <Text style={styles.bookIndexOnePunchLine}>"먼 훗날 나를 읽게 된다면 너는 잠시 울어줄까"</Text>  
-                <Text style={styles.bookIndexText}>날이 더웠다. 햇빛이 뜨거워서 살이 익는 것 같았다. 나를 보는 네 표정이 좋지 않은게 날씨 탓도 있지 않을까 생각했다.</Text>  
-            </TouchableOpacity>
-            <View style={{borderBottomColor: "gray" ,borderBottomWidth: 1,}}/>
-            <TouchableOpacity style={styles.bookIndexOne}>
-                <Text style={styles.bookIndexOneTitle}>01 이별 그 순간</Text>  
-                <Text style={styles.bookIndexOnePunchLine}>"먼 훗날 나를 읽게 된다면 너는 잠시 울어줄까"</Text>  
-                <Text style={styles.bookIndexText}>날이 더웠다. 햇빛이 뜨거워서 살이 익는 것 같았다. 나를 보는 네 표정이 좋지 않은게 날씨 탓도 있지 않을까 생각했다.</Text>  
-            </TouchableOpacity>
-            <View style={{borderBottomColor: "gray" ,borderBottomWidth: 1,}}/>
-            <TouchableOpacity style={styles.bookIndexOne}>
-                <Text style={styles.bookIndexOneTitle}>01 이별 그 순간</Text>  
-                <Text style={styles.bookIndexOnePunchLine}>"먼 훗날 나를 읽게 된다면 너는 잠시 울어줄까"</Text>  
-                <Text style={styles.bookIndexText}>날이 더웠다. 햇빛이 뜨거워서 살이 익는 것 같았다. 나를 보는 네 표정이 좋지 않은게 날씨 탓도 있지 않을까 생각했다.</Text>  
-            </TouchableOpacity>
-            <View style={{borderBottomColor: "gray" ,borderBottomWidth: 1,}}/>
-            <TouchableOpacity style={styles.bookIndexOne}>
-                <Text style={styles.bookIndexOneTitle}>01 이별 그 순간</Text>  
-                <Text style={styles.bookIndexOnePunchLine}>"먼 훗날 나를 읽게 된다면 너는 잠시 울어줄까"</Text>  
-                <Text style={styles.bookIndexText}>날이 더웠다. 햇빛이 뜨거워서 살이 익는 것 같았다. 나를 보는 네 표정이 좋지 않은게 날씨 탓도 있지 않을까 생각했다.</Text>  
-            </TouchableOpacity>
-            <View style={{borderBottomColor: "gray" ,borderBottomWidth: 1,}}/>
-
+            { renderChapterList() }
         </View>
     </ScrollView>
-   );
+    );
 }
 
 const styles = StyleSheet.create({ 
